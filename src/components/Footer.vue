@@ -125,7 +125,6 @@ import logo from "@/assets/images/logo.png";
         color: #fff;
         border-radius: rem(10);
         font-family: "DM Sans";
-        font-weight: 400;
         font-size: rem(20);
         display: flex;
         align-items: center;
