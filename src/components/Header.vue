@@ -55,6 +55,12 @@ function toggleMenu() {
       @include adaptive-value(left, 103, 0);
       @include adaptive-value(width, 194, 70);
       @include adaptive-value(height, 194, 70);
+      @media (max-width: $mobile) {
+        top: rem(18);
+        left: rem(0);
+        width: rem(70);
+        height: rem(70);
+      }
     }
   }
 

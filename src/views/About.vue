@@ -1,5 +1,10 @@
-<script setup></script>
+<script setup>
+import RedButton from "@/components/RedButton.vue";
+</script>
 
 <template>
-  <div>About</div>
+  <div>
+    About
+    <RedButton />
+  </div>
 </template>
