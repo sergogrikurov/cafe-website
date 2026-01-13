@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted, onBeforeUnmount } from "vue";
 import logo from "@/assets/images/logo.png";
 
 const isMenuOpen = ref(false);
@@ -7,6 +7,25 @@ const isMenuOpen = ref(false);
 function toggleMenu() {
   isMenuOpen.value = !isMenuOpen.value;
 }
+
+function handleClickOutside(event) {
+  const menu = document.querySelector(".header__nav");
+  const burger = document.querySelector(".header__burger");
+
+  if (isMenuOpen.value && menu && burger) {
+    if (!menu.contains(event.target) && !burger.contains(event.target)) {
+      isMenuOpen.value = false;
+    }
+  }
+}
+
+onMounted(() => {
+  document.addEventListener("click", handleClickOutside);
+});
+
+onBeforeUnmount(() => {
+  document.removeEventListener("click", handleClickOutside);
+});
 </script>
 
 <template>
@@ -109,6 +128,8 @@ function toggleMenu() {
 
       &.header__nav_active {
         display: flex;
+        border-bottom-left-radius: rem(10);
+        border-bottom-right-radius: rem(10);
       }
     }
   }
