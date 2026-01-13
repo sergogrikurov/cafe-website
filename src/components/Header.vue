@@ -62,12 +62,11 @@ onBeforeUnmount(() => {
   width: 100%;
   height: rem(107);
   z-index: 1000;
-  background-color: #f5f2ef;
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 0 15px;
-  background-color: #f5f2ef;
+  background-color: #cfbcae;
 
   &__logo {
     position: relative;
@@ -125,7 +124,7 @@ onBeforeUnmount(() => {
       top: 100%;
       right: 0;
       width: rem(200);
-      background-color: #f5f2ef;
+      background-color: #cfbcae;
       padding: rem(20);
       box-shadow: 0 rem(4) rem(10) rgba(0, 0, 0, 0.1);
       display: none;
@@ -148,7 +147,7 @@ onBeforeUnmount(() => {
     border: none;
     cursor: pointer;
     padding: 0;
-    border: rem(1) solid #f5f2ef;
+    border: rem(1) solid #cfbcae;
 
     span {
       display: block;

@@ -7,6 +7,11 @@ import RedButton from "@/components/RedButton.vue";
 import Tea from "@/assets/images/home/tea-1.png";
 import Bread from "@/assets/images/home/bread.png";
 import SliderArrow from "@/assets/images/home/slider-arrow.svg";
+import RedArrow from "@/assets/images/home/button-arrow-red.svg";
+import Bakery from "@/assets/images/home/bakery.png";
+import Donut from "@/assets/images/home/donut.png";
+import Cake from "@/assets/images/home/cake.png";
+import Chocolate from "@/assets/images/home/truffle.png";
 
 const slides = [
   {
@@ -94,9 +99,211 @@ function prevSlide() {
         </div>
       </div>
     </div>
-    <div class="home-page__about"></div>
-    <div class="home-page__explore"></div>
-    <div class="home-page__products"></div>
+    <div class="home-page__about home-about">
+      <div class="home-about__image">
+        <img :src="Bread" alt="Bread Image" />
+      </div>
+      <div class="home-about__content">
+        <div class="home-about__content_title">About our Cafe</div>
+        <div class="home-about__content_text">
+          We are a cozy cafe where quality coffee, fresh pastries, and a
+          welcoming atmosphere come together. Every cup is crafted with care,
+          and every guest is treated like a friend.
+        </div>
+        <div class="home-about__content_link">
+          <RouterLink to="/about">
+            Explore More <img :src="RedArrow" alt="Red Arrow" />
+          </RouterLink>
+        </div>
+      </div>
+    </div>
+    <div class="home-page__explore home-explore">
+      <div class="home-explore__content">
+        <div class="home-explore__content_image">
+          <img :src="MaskGroup" alt="Mask Group" />
+        </div>
+        <div class="home-explore__content_title">Explore our Cafe</div>
+        <div class="home-explore__content_text">
+          Step inside our cafe and discover a place where great coffee, fresh
+          pastries, and a warm atmosphere come together to make every visit
+          special.
+        </div>
+      </div>
+      <div class="home-explore__cards home-explore-cards">
+        <div class="home-explore-cards__card">
+          <div class="home-explore-cards__card_img">
+            <img :src="Bakery" alt="Basket of Breads" />
+          </div>
+          <div class="home-explore-cards__card_title">Bread</div>
+          <div class="home-explore-cards__card_text">
+            Freshly baked bread with a crispy crust and soft texture, made daily
+            using traditional recipes.
+          </div>
+          <div class="home-explore-cards__card_link">
+            <RouterLink to="/our-cafe">
+              Explore More <img :src="RedArrow" alt="Red Arrow" />
+            </RouterLink>
+          </div>
+        </div>
+        <div class="home-explore-cards__card">
+          <div class="home-explore-cards__card_img">
+            <img :src="Donut" alt="Donut Image" />
+          </div>
+          <div class="home-explore-cards__card_title">Donut</div>
+          <div class="home-explore-cards__card_text">
+            Soft and sweet donuts with a delicate glaze, perfect for a quick
+            treat or a cozy coffee break.
+          </div>
+          <div class="home-explore-cards__card_link">
+            <RouterLink to="/our-cafe">
+              Explore More <img :src="RedArrow" alt="Red Arrow" />
+            </RouterLink>
+          </div>
+        </div>
+        <div class="home-explore-cards__card">
+          <div class="home-explore-cards__card_img">
+            <img :src="Cake" alt="Cakes Image" />
+          </div>
+          <div class="home-explore-cards__card_title">Cakes</div>
+          <div class="home-explore-cards__card_text">
+            Delicious handmade cakes prepared with fresh ingredients and a touch
+            of creativity in every slice.
+          </div>
+          <div class="home-explore-cards__card_link">
+            <RouterLink to="/our-cafe">
+              Explore More <img :src="RedArrow" alt="Red Arrow" />
+            </RouterLink>
+          </div>
+        </div>
+        <div class="home-explore-cards__card">
+          <div class="home-explore-cards__card_img">
+            <img :src="Chocolate" alt="Chocolates Image" />
+          </div>
+          <div class="home-explore-cards__card_title">Chocolates</div>
+          <div class="home-explore-cards__card_text">
+            Rich chocolate truffles crafted for true chocolate lovers, offering
+            a smooth and indulgent taste.
+          </div>
+          <div class="home-explore-cards__card_link">
+            <RouterLink to="/our-cafe">
+              Explore More <img :src="RedArrow" alt="Red Arrow" />
+            </RouterLink>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="home-page__products home-product">
+      <div class="home-product__content">
+        <div class="home-product__content_title">
+          <h2>Our Products</h2>
+          <img :src="MaskGroup" alt="Mask Group" />
+        </div>
+        <div class="home-product__content_link">
+          <RouterLink to="/products">
+            <RedButton />
+          </RouterLink>
+        </div>
+      </div>
+      <div class="home-product__price home-product-price">
+        <div class="home-product-price__items">
+          <div class="home-product-price__item">
+            <div class="home-product-price__item_title-price">
+              <p>Espresso</p>
+              <p class="home-product-price__item_title-price-dotted"></p>
+              <p>$3</p>
+            </div>
+            <div class="home-product-price__item_description">
+              A rich and intense shot of espresso made from freshly ground
+              coffee beans.
+            </div>
+          </div>
+
+          <div class="home-product-price__item">
+            <div class="home-product-price__item_title-price">
+              <p>Cappuccino</p>
+              <p class="home-product-price__item_title-price-dotted"></p>
+              <p>$5</p>
+            </div>
+            <div class="home-product-price__item_description">
+              Smooth espresso combined with steamed milk and a light layer of
+              milk foam.
+            </div>
+          </div>
+
+          <div class="home-product-price__item">
+            <div class="home-product-price__item_title-price">
+              <p>Latte</p>
+              <p class="home-product-price__item_title-price-dotted"></p>
+              <p>$5</p>
+            </div>
+            <div class="home-product-price__item_description">
+              A creamy blend of espresso and hot milk, perfect for a gentle
+              coffee break.
+            </div>
+          </div>
+
+          <div class="home-product-price__item">
+            <div class="home-product-price__item_title-price">
+              <p>Americano</p>
+              <p class="home-product-price__item_title-price-dotted"></p>
+              <p>$4</p>
+            </div>
+            <div class="home-product-price__item_description">
+              Espresso diluted with hot water, offering a smooth and balanced
+              taste.
+            </div>
+          </div>
+        </div>
+
+        <div class="home-product-price__items">
+          <div class="home-product-price__item">
+            <div class="home-product-price__item_title-price">
+              <p>Fresh Tea</p>
+              <p class="home-product-price__item_title-price-dotted"></p>
+              <p>$4</p>
+            </div>
+            <div class="home-product-price__item_description">
+              Carefully brewed tea made from selected leaves with a natural
+              aroma.
+            </div>
+          </div>
+
+          <div class="home-product-price__item">
+            <div class="home-product-price__item_title-price">
+              <p>Chocolate Cake</p>
+              <p class="home-product-price__item_title-price-dotted"></p>
+              <p>$6</p>
+            </div>
+            <div class="home-product-price__item_description">
+              Soft chocolate cake made with rich cocoa and fresh ingredients.
+            </div>
+          </div>
+
+          <div class="home-product-price__item">
+            <div class="home-product-price__item_title-price">
+              <p>Donut</p>
+              <p class="home-product-price__item_title-price-dotted"></p>
+              <p>$3</p>
+            </div>
+            <div class="home-product-price__item_description">
+              Freshly baked donut with a sweet glaze, perfect with coffee or
+              tea.
+            </div>
+          </div>
+
+          <div class="home-product-price__item">
+            <div class="home-product-price__item_title-price">
+              <p>Cheesecake</p>
+              <p class="home-product-price__item_title-price-dotted"></p>
+              <p>$6</p>
+            </div>
+            <div class="home-product-price__item_description">
+              Classic creamy cheesecake with a delicate texture and rich flavor.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
     <div class="home-page__blog"></div>
     <div class="home-page__vist"></div>
   </div>
@@ -107,7 +314,6 @@ function prevSlide() {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: rem(150) rem(230);
   @include adaptive-value(padding-top, 150, 50);
   @include adaptive-value(padding-bottom, 150, 50);
   @include adaptive-value(padding-left, 230, 15);
@@ -185,6 +391,332 @@ function prevSlide() {
       position: absolute;
       @include adaptive-value(top, 550, 350);
       right: rem(70);
+    }
+  }
+}
+
+.home-about {
+  background-color: #f5f2ef;
+  display: flex;
+  align-items: center;
+  @include adaptive-value(padding-top, 90, 50);
+  @include adaptive-value(padding-bottom, 90, 50);
+  @include adaptive-value(padding-left, 230, 15);
+  @include adaptive-value(padding-right, 230, 15);
+  gap: rem(20);
+  @media (max-width: rem(843)) {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  &__image {
+    flex: 0 0 auto;
+    @include adaptive-value(width, 685, 290);
+    & img {
+      width: 100%;
+      display: block;
+    }
+  }
+
+  &__content {
+    max-width: rem(720);
+    @media (max-width: rem(843)) {
+      text-align: center;
+    }
+    & > *:not(:last-child) {
+      @include adaptive-value(margin-bottom, 30, 20);
+    }
+    &_title {
+      @include adaptive-value(font-size, 100, 40);
+      font-family: "Playfair Display";
+      font-weight: bold;
+      color: #2b231d;
+    }
+    &_text {
+      @include adaptive-value(font-size, 22, 18);
+      font-family: "DM Sans";
+      color: #1e1e1e;
+      line-height: 170%;
+      @media (max-width: rem(843)) {
+        line-height: 140%;
+      }
+    }
+    &_link {
+      font-family: "DM Sans";
+      font-weight: bold;
+      color: #de6868;
+      display: flex;
+      align-items: center;
+      font-size: rem(22);
+      position: relative;
+      display: inline-block;
+
+      &::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        bottom: -3px;
+        width: 0;
+        height: rem(2);
+        background-color: #de6868;
+        transition: width 0.25s ease;
+      }
+
+      &:hover {
+        color: #de6868;
+      }
+
+      &:hover::after {
+        width: 80%;
+      }
+      & img {
+        margin-top: -1px;
+      }
+    }
+  }
+}
+
+.home-explore {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #f8f9fa;
+  @include adaptive-value(padding-top, 60, 50);
+  @include adaptive-value(padding-bottom, 60, 50);
+  @include adaptive-value(padding-left, 200, 15);
+  @include adaptive-value(padding-right, 200, 15);
+  & > *:not(:last-child) {
+    @include adaptive-value(margin-bottom, 65, 40);
+  }
+  &__content {
+    max-width: rem(870);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    & > *:not(:last-child) {
+      @include adaptive-value(margin-bottom, 30, 10);
+    }
+    &_image {
+      @include adaptive-value(width, 308, 290);
+      & img {
+        width: 100%;
+      }
+    }
+    &_title {
+      font-family: "Playfair Display";
+      font-weight: bold;
+      @include adaptive-value(font-size, 70, 36);
+      color: #2b231d;
+    }
+    &_text {
+      font-family: "DM Sans";
+      font-size: rem(18);
+      color: #1e1e1e;
+      line-height: 170%;
+      @media (max-width: $mobile) {
+        line-height: 140%;
+      }
+    }
+  }
+}
+.home-explore-cards {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  @include adaptive-value(gap, 74, 20);
+  @media (max-width: rem(1024)) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  @media (max-width: rem(560)) {
+    grid-template-columns: 1fr;
+    place-items: center;
+  }
+  &__card {
+    background-color: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    @include adaptive-value(max-width, 325, 290);
+    border-radius: rem(10);
+    padding: rem(27) rem(13);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+
+    &:hover {
+      transform: translateY(rem(-6));
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.08);
+    }
+
+    & > *:not(:last-child) {
+      margin-bottom: rem(20);
+    }
+    &_img {
+      width: rem(158);
+      height: rem(158);
+      overflow: hidden;
+      &:hover {
+        transform: scale(1.05);
+      }
+      & img {
+        width: 100%;
+        display: block;
+        transition: transform 0.4s ease;
+      }
+    }
+
+    &_title {
+      font-family: "Playfair Display";
+      font-weight: bold;
+      font-size: rem(32);
+      color: #1e1e1e;
+    }
+
+    &_text {
+      flex: 1;
+      font-family: "DM Sans";
+      font-size: rem(18);
+      line-height: 170%;
+      color: #1e1e1e;
+      @media (max-width: $mobile) {
+        line-height: 120%;
+      }
+    }
+
+    &_link {
+      font-family: "DM Sans";
+      font-weight: bold;
+      color: #de6868;
+      display: flex;
+      align-items: center;
+      font-size: rem(20);
+      position: relative;
+      display: inline-block;
+
+      &::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        bottom: -3px;
+        width: 0;
+        height: rem(2);
+        background-color: #de6868;
+        transition: width 0.25s ease;
+      }
+
+      &:hover {
+        color: #de6868;
+      }
+
+      &:hover::after {
+        width: 80%;
+      }
+      & img {
+        margin-top: -2px;
+      }
+    }
+  }
+}
+
+.home-product {
+  background-color: #f5f2ef;
+  @include adaptive-value(padding-top, 100, 50);
+  @include adaptive-value(padding-bottom, 100, 50);
+  @include adaptive-value(padding-left, 200, 15);
+  @include adaptive-value(padding-right, 200, 15);
+  & > *:not(:last-child) {
+    @include adaptive-value(margin-bottom, 75, 40);
+  }
+
+  &__content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    @media (max-width: $mobile) {
+      flex-direction: column;
+      justify-content: center;
+      & > *:not(:last-child) {
+        margin-bottom: rem(20);
+      }
+    }
+    &_title {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      font-family: "Playfair Display";
+      font-weight: bold;
+      @include adaptive-value(font-size, 70, 30);
+      color: #2b231d;
+      & img {
+        margin-top: rem(10);
+        @include adaptive-value(width, 308, 290);
+      }
+    }
+  }
+}
+
+.home-product-price {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  @media (max-width: $mobile) {
+    flex-direction: column;
+    justify-content: center;
+    & > *:not(:last-child) {
+      margin-bottom: rem(20);
+    }
+  }
+  &__items {
+    @include adaptive-value(width, 618, 150);
+    & > *:not(:last-child) {
+      @include adaptive-value(margin-bottom, 40, 0);
+    }
+    @media (max-width: $mobile) {
+      width: rem(270);
+      & > *:not(:last-child) {
+        margin-bottom: rem(10);
+      }
+    }
+  }
+
+  &__item {
+    height: rem(115);
+    @media (max-width: $mobile) {
+      height: rem(90);
+    }
+    & > *:not(:last-child) {
+      margin-bottom: rem(10);
+    }
+    &_title-price {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-family: "Playfair Display";
+      font-weight: bold;
+      @include adaptive-value(font-size, 40, 16);
+    }
+    &_title-price-dotted {
+      flex: 1 1 auto;
+      border: 1px dotted black;
+      margin: rem(0) rem(20);
+      @media (max-width: $mobile) {
+        display: none;
+      }
+    }
+
+    &_description {
+      font-family: "DM Sans";
+      font-size: rem(18);
+      line-height: 170%;
+      color: #2b231d;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      @media (max-width: $mobile) {
+        line-height: 110%;
+      }
     }
   }
 }

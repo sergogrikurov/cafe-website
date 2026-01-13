@@ -49,7 +49,7 @@ import logo from "@/assets/images/logo.png";
 
 <style lang="scss" scoped>
 .footer {
-  background-color: #f5f2ef;
+  background-color: #cfbcae;
   padding: rem(50) rem(75) rem(30) rem(75);
   @media (max-width: $mobile) {
     padding: rem(30) rem(15);
@@ -70,7 +70,7 @@ import logo from "@/assets/images/logo.png";
   display: grid;
   grid-template-columns: repeat(4, 1fr);
 
-  @media (max-width: 1360px) {
+  @media (max-width: rem(1360)) {
     grid-template-columns: repeat(2, 1fr);
     gap: rem(40);
   }
