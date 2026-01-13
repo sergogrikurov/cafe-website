@@ -56,14 +56,18 @@ onBeforeUnmount(() => {
 
 <style lang="scss" scoped>
 .header {
-  position: relative;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: rem(107);
+  z-index: 1000;
+  background-color: #f5f2ef;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  height: rem(107);
   padding: 0 15px;
   background-color: #f5f2ef;
-  z-index: 5;
 
   &__logo {
     position: relative;
