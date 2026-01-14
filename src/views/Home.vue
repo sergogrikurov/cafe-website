@@ -4,14 +4,21 @@ const currentSlide = ref(0);
 
 import MaskGroup from "@/assets/images/home/mask-group.svg";
 import RedButton from "@/components/RedButton.vue";
-import Tea from "@/assets/images/home/tea-1.png";
+
+import Tea from "@/assets/images/home/tea.png";
 import Bread from "@/assets/images/home/bread.png";
+
 import SliderArrow from "@/assets/images/home/slider-arrow.svg";
 import RedArrow from "@/assets/images/home/button-arrow-red.svg";
+
 import Bakery from "@/assets/images/home/bakery.png";
 import Donut from "@/assets/images/home/donut.png";
 import Cake from "@/assets/images/home/cake.png";
 import Chocolate from "@/assets/images/home/truffle.png";
+
+import BlogImage1 from "@/assets/images/home/blog-image-1.png";
+import BlogImage2 from "@/assets/images/home/blog-image-2.png";
+import BlogImage3 from "@/assets/images/home/blog-image-3.png";
 
 const slides = [
   {
@@ -304,8 +311,117 @@ function prevSlide() {
         </div>
       </div>
     </div>
-    <div class="home-page__blog"></div>
-    <div class="home-page__vist"></div>
+    <div class="home-page__blog home-page-blog">
+      <div class="home-page-blog__title">
+        <h2>Blog Posts</h2>
+        <img :src="MaskGroup" alt="Mask Group" />
+      </div>
+      <div class="home-page-blog__cards home-page-blog-cards">
+        <div class="home-page-blog-cards__card">
+          <div class="home-page-blog-cards__card_image">
+            <img :src="BlogImage1" alt="Cafe Image" />
+          </div>
+          <div class="home-page-blog-cards__card_title">Cafe</div>
+          <div class="home-page-blog-cards__card_desc">
+            A cozy place to enjoy coffee, desserts, and calm moments.
+          </div>
+          <div class="home-page-blog-cards__card_link">
+            <RouterLink to="/blog">
+              Read Blog <img :src="RedArrow" alt="Red Arrow" />
+            </RouterLink>
+          </div>
+        </div>
+
+        <div class="home-page-blog-cards__card">
+          <div class="home-page-blog-cards__card_image">
+            <img :src="BlogImage2" alt="Outdoor Cafe Image" />
+          </div>
+          <div class="home-page-blog-cards__card_title">Outdoor Cafe</div>
+          <div class="home-page-blog-cards__card_desc">
+            Fresh air, good coffee, and a calm atmosphere — the perfect place to
+            unwind.
+          </div>
+          <div class="home-page-blog-cards__card_link">
+            <RouterLink to="/blog">
+              Read Blog <img :src="RedArrow" alt="Red Arrow" />
+            </RouterLink>
+          </div>
+        </div>
+
+        <div class="home-page-blog-cards__card">
+          <div class="home-page-blog-cards__card_image">
+            <img :src="BlogImage3" alt="Coffee Trio Image" />
+          </div>
+          <div class="home-page-blog-cards__card_title">Coffee</div>
+          <div class="home-page-blog-cards__card_desc">
+            Different cups, one love for coffee.
+          </div>
+          <div class="home-page-blog-cards__card_link">
+            <RouterLink to="/blog">
+              Read Blog <img :src="RedArrow" alt="Red Arrow" />
+            </RouterLink>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="home-page__vist home-page-vist">
+      <div class="home-page-vist__content">
+        <div class="home-page-vist__content_title">
+          <h3>Visit Us</h3>
+          <img :src="MaskGroup" alt="Mask Group" />
+        </div>
+        <p>
+          Visit our cafe and enjoy freshly brewed coffee, delicious desserts,
+          and a cozy atmosphere made for relaxing moments.
+        </p>
+      </div>
+      <div class="home-page-vist__items home-page-vist-items">
+        <div class="home-page-vist-items__map">
+          <iframe
+            src="https://www.openstreetmap.org/export/embed.html?bbox=44.790%2C41.709%2C44.820%2C41.725&layer=mapnik"
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+          ></iframe>
+        </div>
+        <div class="home-page-vist-items__work">
+          <div class="home-page-vist-items__work_days">
+            <p>MONDAY</p>
+            <span></span>
+            <p>9:00AM-9:00PM</p>
+          </div>
+          <div class="home-page-vist-items__work_days">
+            <p>TUESDAY</p>
+            <span></span>
+            <p>9:00AM-9:00PM</p>
+          </div>
+          <div class="home-page-vist-items__work_days">
+            <p>Wednesday</p>
+            <span></span>
+            <p>9:00AM-9:00PM</p>
+          </div>
+          <div class="home-page-vist-items__work_days">
+            <p>THURSDAY</p>
+            <span></span>
+            <p>9:00AM-9:00PM</p>
+          </div>
+          <div class="home-page-vist-items__work_days">
+            <p>FRIDAY</p>
+            <span></span>
+            <p>9:00AM-9:00PM</p>
+          </div>
+          <div class="home-page-vist-items__work_days">
+            <p>SATURDAY</p>
+            <span></span>
+            <p>9:00AM-9:00PM</p>
+          </div>
+          <div class="home-page-vist-items__work_days">
+            <p>SUNDAY</p>
+            <span></span>
+            <p>CLOSE</p>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -318,6 +434,7 @@ function prevSlide() {
   @include adaptive-value(padding-bottom, 150, 50);
   @include adaptive-value(padding-left, 230, 15);
   @include adaptive-value(padding-right, 230, 15);
+  background-color: #f8f9fa;
   position: relative;
   @media (max-width: $mobile) {
     flex-direction: column;
@@ -716,6 +833,221 @@ function prevSlide() {
       overflow: hidden;
       @media (max-width: $mobile) {
         line-height: 110%;
+      }
+    }
+  }
+}
+
+.home-page-blog {
+  background-color: #f8f9fa;
+  @include adaptive-value(padding-top, 80, 50);
+  @include adaptive-value(padding-bottom, 150, 50);
+  @include adaptive-value(padding-left, 160, 15);
+  @include adaptive-value(padding-right, 160, 15);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  &__title {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: "Playfair Display";
+    font-weight: bold;
+    @include adaptive-value(font-size, 70, 30);
+    color: #2b231d;
+    & img {
+      margin-top: rem(10);
+      @include adaptive-value(width, 308, 290);
+    }
+  }
+}
+.home-page-blog-cards {
+  width: 100%;
+  @include adaptive-value(margin-top, 50, 35);
+  display: flex;
+  justify-content: space-between;
+  align-items: stretch;
+  gap: rem(15);
+  @media (max-width: rem(1024)) {
+    flex-wrap: wrap;
+  }
+  @media (max-width: $mobile) {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  &__card {
+    @include adaptive-value(padding-top, 30, 15);
+    @include adaptive-value(padding-bottom, 30, 15);
+    @include adaptive-value(padding-left, 30, 15);
+    @include adaptive-value(padding-right, 30, 15);
+    background-color: #fff;
+    text-align: center;
+    @include adaptive-value(width, 450, 150);
+    border-radius: rem(10);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    @media (max-width: rem(1024)) {
+      @include adaptive-value(width, 450, 270);
+    }
+
+    & > *:not(:last-child) {
+      @include adaptive-value(margin-bottom, 30, 15);
+    }
+    &_image {
+      & img {
+        width: 100%;
+        display: block;
+      }
+    }
+
+    &_title {
+      font-family: "Playfair Display";
+      font-weight: bold;
+      @include adaptive-value(font-size, 32, 20);
+      color: #1e1e1e;
+    }
+
+    &_desc {
+      flex-grow: 1;
+      font-family: "DM Sans";
+      font-size: rem(18);
+      color: #1e1e1e;
+      line-height: 170%;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      @media (max-width: $mobile) {
+        line-height: 110%;
+      }
+    }
+
+    &_link {
+      font-family: "DM Sans";
+      font-weight: bold;
+      color: #de6868;
+      display: flex;
+      align-items: center;
+      font-size: rem(20);
+      position: relative;
+      display: inline-block;
+
+      &::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        bottom: -3px;
+        width: 0;
+        height: rem(2);
+        background-color: #de6868;
+        transition: width 0.25s ease;
+      }
+
+      &:hover {
+        color: #de6868;
+      }
+
+      &:hover::after {
+        width: 80%;
+      }
+      & img {
+        margin-top: -2px;
+      }
+    }
+  }
+}
+
+.home-page-vist {
+  @include adaptive-value(padding-top, 100, 50);
+  @include adaptive-value(padding-bottom, 100, 50);
+  @include adaptive-value(padding-left, 160, 15);
+  @include adaptive-value(padding-right, 160, 15);
+  background-color: #f5f2ef;
+  & > *:not(:last-child) {
+    @include adaptive-value(margin-bottom, 120, 30);
+  }
+  &__content {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    @media (max-width: rem(1024)) {
+      flex-direction: column;
+      text-align: center;
+      & > *:not(:last-child) {
+        margin-bottom: rem(20);
+      }
+    }
+    &_title {
+      display: flex;
+      align-items: center;
+      flex-direction: column;
+      font-family: "Playfair Display";
+      font-weight: bold;
+      @include adaptive-value(font-size, 70, 30);
+      color: #2b231d;
+      & img {
+        @include adaptive-value(width, 230, 110);
+      }
+    }
+    & p {
+      font-family: "DM Sans";
+      @include adaptive-value(font-size, 20, 18);
+      color: #1e1e1e;
+      line-height: 170%;
+      max-width: rem(620);
+      @media (max-width: rem(1024)) {
+        line-height: 110%;
+      }
+    }
+  }
+}
+.home-page-vist-items {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  @include adaptive-value(gap, 100, 20);
+  @media (max-width: rem(1024)) {
+    flex-direction: column;
+    & > *:not(:last-child) {
+      margin-bottom: rem(20);
+    }
+  }
+
+  &__map {
+    @include adaptive-value(width, 765, 290);
+    border-radius: rem(10);
+    overflow: hidden;
+    @include adaptive-value(height, 530, 250);
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+  }
+
+  &__work {
+    @include adaptive-value(width, 650, 290);
+    & > *:not(:last-child) {
+      @include adaptive-value(margin-bottom, 38, 10);
+    }
+    &_days {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-family: "Playfair Display";
+      font-weight: bold;
+      @include adaptive-value(font-size, 30, 18);
+      color: #2b231d;
+      & span {
+        flex: 1 1 auto;
+        border: 1px dotted black;
+        margin: rem(0) rem(20);
+        @media (max-width: rem(1024)) {
+          display: none;
+        }
       }
     }
   }
