@@ -146,11 +146,7 @@ function prevSlide() {
             Freshly baked bread with a crispy crust and soft texture, made daily
             using traditional recipes.
           </div>
-          <div class="home-explore-cards__card_link">
-            <RouterLink to="/our-cafe">
-              Explore More <img :src="RedArrow" alt="Red Arrow" />
-            </RouterLink>
-          </div>
+          <div class="home-explore-cards__card_link"></div>
         </div>
         <div class="home-explore-cards__card">
           <div class="home-explore-cards__card_img">
