@@ -1,6 +1,5 @@
 <script setup>
-import { ref } from "vue";
-const currentSlide = ref(0);
+import { ref, onMounted, onUnmounted } from "vue";
 
 import MaskGroup from "@/assets/images/home/mask-group.svg";
 import RedButton from "@/components/RedButton.vue";
@@ -35,6 +34,8 @@ const slides = [
   },
 ];
 
+const currentSlide = ref(0);
+
 let touchStartX = 0;
 let touchEndX = 0;
 
@@ -66,6 +67,18 @@ function nextSlide() {
 function prevSlide() {
   currentSlide.value = (currentSlide.value - 1 + slides.length) % slides.length;
 }
+
+let autoplayTimer = null;
+
+onMounted(() => {
+  autoplayTimer = setInterval(() => {
+    nextSlide();
+  }, 1500);
+});
+
+onUnmounted(() => {
+  clearInterval(autoplayTimer);
+});
 </script>
 
 <template>
@@ -652,7 +665,9 @@ function prevSlide() {
     @include adaptive-value(max-width, 325, 290);
     border-radius: rem(10);
     padding: rem(27) rem(13);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    transition:
+      transform 0.3s ease,
+      box-shadow 0.3s ease;
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
 
     &:hover {

@@ -1,0 +1,29 @@
+@use "sass:math";
+
+$maxWidth: 1920;
+$minWidth: 320;
+
+@mixin adaptive-percent(
+  $property,
+  $parentSize,
+  // размер родителя в px
+  $startPercent,
+  // значение на большом экране
+  $minPercent // значение на маленьком экране
+) {
+  // перевод процентов в пиксели
+  $startPx: $parentSize * math.div($startPercent, 100);
+  $minPx: $parentSize * math.div($minPercent, 100);
+
+  $delta: $startPx - $minPx;
+
+  // значение на большом экране
+  #{$property}: #{$startPx}px;
+
+  @media (max-width: #{$maxWidth}px) {
+    #{$property}: calc(
+      #{$minPx}px + #{$delta} *
+        ((100vw - #{$minWidth}px) / (#{$maxWidth - $minWidth}))
+    );
+  }
+}

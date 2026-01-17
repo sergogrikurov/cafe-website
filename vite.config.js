@@ -18,6 +18,7 @@ export default defineConfig({
         additionalData: `
           @use "@/assets/scss/variables" as *;
           @use "@/assets/scss/adaptive-value" as *;
+          @use "@/assets/scss/adaptive-percent" as *;
           @use "@/assets/scss/functions.scss" as *;
         `,
       },
