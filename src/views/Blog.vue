@@ -9,6 +9,8 @@ import DropArrow from "@/assets/images/blog/drop-arrow.svg";
 
 import blogCards from "@/data/blog";
 
+import vDa from "@/directives/v-da";
+
 // --------------------
 // Категории
 // --------------------
@@ -135,7 +137,10 @@ const recentPosts = computed(() => {
         <!-- ---------------- Sidebar ---------------- -->
         <aside class="blog-content__side blog-side">
           <!-- Categories Select -->
-          <div class="blog-side__select">
+          <div
+            v-da="'.blog-content__wrapper, 1024, first'"
+            class="blog-side__select"
+          >
             <h4>Categories</h4>
             <div class="blog-side__categories-select" ref="selectRef">
               <button
@@ -326,13 +331,22 @@ const recentPosts = computed(() => {
     flex-direction: column;
     color: #1e1e1e;
     font-family: "DM Sans";
-    @include adaptive-value(width, 478, 290);
+    @include adaptive-value(width, 478, 150);
     & > *:not(:last-child) {
-      margin-bottom: rem(20);
+      @include adaptive-value(margin-bottom, 20, 10);
     }
-    & img {
+    @media (max-width: rem(1024)) {
+      align-items: center;
+      text-align: center;
+    }
+    @media (max-width: $mobile) {
       @include adaptive-value(width, 478, 290);
-      @include adaptive-value(height, 357, 217);
+    }
+
+    & img {
+      display: block;
+      width: 100%;
+      @include adaptive-value(height, 357, 130);
     }
     & h3 {
       font-weight: bold;
@@ -341,13 +355,16 @@ const recentPosts = computed(() => {
 
     & p {
       font-size: rem(20);
-      line-height: 170%;
       flex: 1 1 auto;
       display: -webkit-box;
       -webkit-line-clamp: 2;
       line-clamp: 2;
       -webkit-box-orient: vertical;
       overflow: hidden;
+      line-height: 170%;
+      @media (max-width: rem(1024)) {
+        line-height: 130%;
+      }
       @media (max-width: $mobile) {
         line-height: 110%;
       }
@@ -406,8 +423,6 @@ const recentPosts = computed(() => {
   padding-right: rem(50);
   @include adaptive-value(padding-top, 169, 50);
   @include adaptive-value(padding-bottom, 169, 50);
-  //@include adaptive-value(padding-left, 169, 15);
-  //@include adaptive-value(padding-right, 169, 15);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -417,19 +432,29 @@ const recentPosts = computed(() => {
     justify-content: space-around;
     @include adaptive-value(margin-bottom, 180, 50);
     @include adaptive-value(gap, 20, 0);
+    @media (max-width: rem(1024)) {
+      flex-direction: column;
+      align-items: center;
+    }
   }
   &__cards {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     @include adaptive-value(gap, 40, 20);
-  }
-  &__side {
-    @include adaptive-value(width, 478, 290);
-    height: rem(1000);
+    @media (max-width: rem(1024)) {
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      flex-wrap: wrap;
+    }
   }
 }
 // Select
 .blog-side {
+  @include adaptive-value(width, 478, 290);
+  @media (max-width: rem(1024)) {
+    display: none;
+  }
   & > *:not(:last-child) {
     @include adaptive-value(margin-bottom, 40, 30);
   }
@@ -441,6 +466,13 @@ const recentPosts = computed(() => {
     padding: rem(15);
     border-radius: rem(10);
     background-color: #cfbcae;
+    @media (max-width: rem(1024)) {
+      width: rem(290);
+      @include adaptive-value(margin-bottom, 50, 20);
+    }
+    @media (max-width: $mobile) {
+      @include adaptive-value(width, 478, 290);
+    }
     & > *:not(:last-child) {
       margin-bottom: rem(15);
     }
