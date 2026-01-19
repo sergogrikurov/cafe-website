@@ -3,6 +3,7 @@ import Home from "../views/Home.vue";
 import Products from "@/views/Products.vue";
 import OurCafe from "@/views/OurCafe.vue";
 import Blog from "@/views/Blog.vue";
+import BlogPost from "@/views/BlogPost.vue";
 import About from "@/views/About.vue";
 
 const router = createRouter({
@@ -27,6 +28,12 @@ const router = createRouter({
       path: "/blog",
       name: "blog",
       component: Blog,
+    },
+    {
+      path: "/blog/:id",
+      name: "BlogPost",
+      component: BlogPost,
+      props: true,
     },
     {
       path: "/about",

@@ -485,7 +485,7 @@ onUnmounted(() => {
 }
 
 .slider {
-  @include adaptive-value(padding-top, 50, 50);
+  padding-top: rem(50);
   @include adaptive-value(padding-bottom, 250, 50);
   @include adaptive-value(padding-left, 260, 15);
   @include adaptive-value(padding-right, 260, 15);
@@ -629,14 +629,8 @@ onUnmounted(() => {
   }
 
   &__image {
-    @include adaptive-value(width, 185, 185);
-    @include adaptive-value(height, 185, 185);
-
-    // & img {
-    //   display: block;
-    //   width: 100%;
-    //   height: 100%;
-    // }
+    width: rem(185);
+    height: rem(185);
   }
   &__content {
     @include adaptive-value(width, 296, 185);

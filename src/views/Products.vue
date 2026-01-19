@@ -8,7 +8,7 @@ import MaskGroup from "@/assets/images/home/mask-group.svg";
 import Search from "../components/Search.vue";
 import Chevron from "@/assets/images/products/chevron.svg";
 import Cart from "@/assets/images/products/cart.svg";
-import ArrowCircle from "@/assets/images/products/arrow-circle.svg";
+import ArrowCircle from "@/assets/images/arrow-circle.svg";
 
 // --------------------
 // Данные
@@ -34,10 +34,10 @@ const isFilterOpen = ref(false);
 onMounted(() => {
   const handleClickOutside = (e) => {
     const dropdown = document.querySelector(
-      ".products-e-shop__adaptive-filter-dropdown"
+      ".products-e-shop__adaptive-filter-dropdown",
     );
     const button = document.querySelector(
-      ".products-e-shop__adaptive-filter_btn"
+      ".products-e-shop__adaptive-filter_btn",
     );
     if (
       dropdown &&
@@ -97,7 +97,7 @@ const itemsPerPage = ref(12);
 
 // Общее количество страниц
 const totalPages = computed(() =>
-  Math.ceil(sortedProducts.value.length / itemsPerPage.value)
+  Math.ceil(sortedProducts.value.length / itemsPerPage.value),
 );
 
 // Продукты для текущей страницы
@@ -862,7 +862,9 @@ const placeOrder = () => {
         justify-content: center;
         gap: rem(12);
 
-        transition: background-color 0.25s ease, transform 0.15s ease,
+        transition:
+          background-color 0.25s ease,
+          transform 0.15s ease,
           box-shadow 0.15s ease;
 
         box-shadow: 0 6px 12px rgba(0, 0, 0, 0.18);

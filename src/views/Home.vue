@@ -15,9 +15,9 @@ import Donut from "@/assets/images/home/donut.png";
 import Cake from "@/assets/images/home/cake.png";
 import Chocolate from "@/assets/images/home/truffle.png";
 
-import BlogImage1 from "@/assets/images/home/blog-image-1.png";
-import BlogImage2 from "@/assets/images/home/blog-image-2.png";
-import BlogImage3 from "@/assets/images/home/blog-image-3.png";
+import Image1 from "@/assets/images/blog/image1.png";
+import Image2 from "@/assets/images/blog/image2.png";
+import Image3 from "@/assets/images/blog/image3.png";
 
 const slides = [
   {
@@ -328,11 +328,11 @@ onUnmounted(() => {
       <div class="home-page-blog__cards home-page-blog-cards">
         <div class="home-page-blog-cards__card">
           <div class="home-page-blog-cards__card_image">
-            <img :src="BlogImage1" alt="Cafe Image" />
+            <img :src="Image1" alt="Coffee Trio Image" />
           </div>
-          <div class="home-page-blog-cards__card_title">Cafe</div>
+          <div class="home-page-blog-cards__card_title">Coffee</div>
           <div class="home-page-blog-cards__card_desc">
-            A cozy place to enjoy coffee, desserts, and calm moments.
+            Different cups, one love for coffee.
           </div>
           <div class="home-page-blog-cards__card_link">
             <RouterLink to="/blog">
@@ -343,7 +343,7 @@ onUnmounted(() => {
 
         <div class="home-page-blog-cards__card">
           <div class="home-page-blog-cards__card_image">
-            <img :src="BlogImage2" alt="Outdoor Cafe Image" />
+            <img :src="Image3" alt="Outdoor Cafe Image" />
           </div>
           <div class="home-page-blog-cards__card_title">Outdoor Cafe</div>
           <div class="home-page-blog-cards__card_desc">
@@ -359,11 +359,11 @@ onUnmounted(() => {
 
         <div class="home-page-blog-cards__card">
           <div class="home-page-blog-cards__card_image">
-            <img :src="BlogImage3" alt="Coffee Trio Image" />
+            <img :src="Image2" alt="Cafe Image" />
           </div>
-          <div class="home-page-blog-cards__card_title">Coffee</div>
+          <div class="home-page-blog-cards__card_title">Cafe</div>
           <div class="home-page-blog-cards__card_desc">
-            Different cups, one love for coffee.
+            A cozy place to enjoy coffee, desserts, and calm moments.
           </div>
           <div class="home-page-blog-cards__card_link">
             <RouterLink to="/blog">
@@ -907,8 +907,11 @@ onUnmounted(() => {
       @include adaptive-value(margin-bottom, 30, 15);
     }
     &_image {
+      @include adaptive-value(height, 291, 179);
+
       & img {
         width: 100%;
+        height: 100%;
         display: block;
       }
     }
