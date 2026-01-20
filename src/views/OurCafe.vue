@@ -2,7 +2,7 @@
 import { ref, onMounted, onUnmounted } from "vue";
 
 import Search from "@/components/Search.vue";
-import MaskGroup from "@/assets/images/home/mask-group.svg";
+import MaskGroup from "@/assets/images/mask-group.svg";
 
 import SliderArrow from "@/assets/images/our-cafe/slider-arrow.svg";
 

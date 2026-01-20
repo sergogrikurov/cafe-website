@@ -4,7 +4,7 @@ import { ref, computed, watch, onMounted, onBeforeUnmount } from "vue";
 // --------------------
 // Импорты компонентов и изображений
 // --------------------
-import MaskGroup from "@/assets/images/home/mask-group.svg";
+import MaskGroup from "@/assets/images/mask-group.svg";
 import Search from "../components/Search.vue";
 import Chevron from "@/assets/images/products/chevron.svg";
 import Cart from "@/assets/images/products/cart.svg";

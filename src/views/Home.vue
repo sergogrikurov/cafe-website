@@ -1,7 +1,7 @@
 <script setup>
 import { ref, onMounted, onUnmounted } from "vue";
 
-import MaskGroup from "@/assets/images/home/mask-group.svg";
+import MaskGroup from "@/assets/images/mask-group.svg";
 import RedButton from "@/components/RedButton.vue";
 
 import Tea from "@/assets/images/home/tea.png";

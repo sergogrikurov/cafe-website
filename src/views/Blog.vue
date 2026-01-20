@@ -1,7 +1,7 @@
 <script setup>
 import { ref, computed, watch, onMounted, onUnmounted } from "vue";
 
-import MaskGroup from "@/assets/images/home/mask-group.svg";
+import MaskGroup from "@/assets/images/mask-group.svg";
 import Search from "@/components/Search.vue";
 import RedArrow from "@/assets/images/blog/red-arrow-right.svg";
 import ArrowCircle from "@/assets/images/arrow-circle.svg";
