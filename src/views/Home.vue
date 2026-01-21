@@ -83,7 +83,7 @@ onUnmounted(() => {
 
 <template>
   <div class="home-page">
-    <div
+    <section
       class="home-page__slider slider"
       @touchstart="onTouchStart"
       @touchend="onTouchEnd"
@@ -118,8 +118,8 @@ onUnmounted(() => {
           <img :src="SliderArrow" alt="Slider Arrow Right" />
         </div>
       </div>
-    </div>
-    <div class="home-page__about home-about">
+    </section>
+    <section class="home-page__about home-about">
       <div class="home-about__image">
         <img :src="Bread" alt="Bread Image" />
       </div>
@@ -136,8 +136,8 @@ onUnmounted(() => {
           </RouterLink>
         </div>
       </div>
-    </div>
-    <div class="home-page__explore home-explore">
+    </section>
+    <section class="home-page__explore home-explore">
       <div class="home-explore__content">
         <div class="home-explore__content_image">
           <img :src="MaskGroup" alt="Mask Group" />
@@ -207,8 +207,8 @@ onUnmounted(() => {
           </div>
         </div>
       </div>
-    </div>
-    <div class="home-page__products home-product">
+    </section>
+    <section class="home-page__products home-product">
       <div class="home-product__content">
         <div class="home-product__content_title">
           <h2>Our Products</h2>
@@ -319,8 +319,8 @@ onUnmounted(() => {
           </div>
         </div>
       </div>
-    </div>
-    <div class="home-page__blog home-page-blog">
+    </section>
+    <section class="home-page__blog home-page-blog">
       <div class="home-page-blog__title">
         <h2>Blog Posts</h2>
         <img :src="MaskGroup" alt="Mask Group" />
@@ -372,8 +372,8 @@ onUnmounted(() => {
           </div>
         </div>
       </div>
-    </div>
-    <div class="home-page__vist home-page-vist">
+    </section>
+    <section class="home-page__vist home-page-vist">
       <div class="home-page-vist__content">
         <div class="home-page-vist__content_title">
           <h3>Visit Us</h3>
@@ -430,7 +430,7 @@ onUnmounted(() => {
           </div>
         </div>
       </div>
-    </div>
+    </section>
   </div>
 </template>
 

@@ -1,35 +1,89 @@
 <script setup>
 import { ref, computed, watch, onMounted, onBeforeUnmount } from "vue";
 
-// --------------------
-// Импорты компонентов и изображений
-// --------------------
+// -------------------- // ASSETS
+import Search from "@/assets/images/search.svg";
 import MaskGroup from "@/assets/images/mask-group.svg";
-import Search from "../components/Search.vue";
 import Chevron from "@/assets/images/products/chevron.svg";
 import Cart from "@/assets/images/products/cart.svg";
 import ArrowCircle from "@/assets/images/arrow-circle.svg";
 
-// --------------------
-// Данные
-// --------------------
+// -------------------- // DATA
 import products from "../data/products.js";
 
-// --------------------
-// Директивы
-// --------------------
+// -------------------- // DIRECTIVES
 import vDa from "@/directives/v-da";
 
-// --------------------
-// --------------------
-// FILTER / SORTING
-// --------------------
-// --------------------
-const nameFilter = ref("All"); // All, Wafers, Bread, Chocolates
-const priceFilter = ref("all"); // all, low, medium, high
-const sortOrder = ref(null); // asc | desc
+// -------------------- // COMPOSABLES
+import { useClickOutside } from "@/composables/useClickOutside";
+import { useRating } from "@/composables/useRating";
+useRating();
+
+// ==================================================
+// 🔍 SEARCH
+// ==================================================
+const searchQuery = ref("");
+const isSearchOpen = ref(false);
+const searchWrapper = ref(null);
+
+useClickOutside(searchWrapper, () => {
+  isSearchOpen.value = false;
+});
+
+const searchResults = computed(() => {
+  if (!searchQuery.value.trim()) return [];
+
+  const q = searchQuery.value.toLowerCase();
+  const map = new Map();
+
+  products.forEach((product) => {
+    const name = product.name.toLowerCase();
+
+    if (!name.includes(q)) return;
+
+    if (!map.has(product.name)) {
+      map.set(product.name, {
+        name: product.name,
+        count: 1,
+      });
+    } else {
+      map.get(product.name).count++;
+    }
+  });
+
+  return Array.from(map.values());
+});
+
+const selectSearchResult = (product) => {
+  searchQuery.value = product.name;
+  isSearchOpen.value = false;
+  currentPage.value = 1;
+};
+
+// ==================================================
+// FILTER / SORT
+// ==================================================
+const sortWrapper = ref(null);
+const nameFilter = ref("All");
+const priceFilter = ref("all");
+const sortOrder = ref(null);
 const isOpen = ref(false);
 const isFilterOpen = ref(false);
+
+const handleClickOutside = (e) => {
+  if (!sortWrapper.value) return;
+  if (!sortWrapper.value.contains(e.target)) {
+    isOpen.value = false;
+  }
+};
+
+onMounted(() => {
+  document.addEventListener("click", handleClickOutside);
+});
+
+onBeforeUnmount(() => {
+  document.removeEventListener("click", handleClickOutside);
+});
 
 onMounted(() => {
   const handleClickOutside = (e) => {
@@ -47,18 +101,23 @@ onMounted(() => {
       isFilterOpen.value = false;
     }
   };
-
   document.addEventListener("click", handleClickOutside);
-
-  // Очистка слушателя при размонтировании компонента
   onBeforeUnmount(() => {
     document.removeEventListener("click", handleClickOutside);
   });
 });
 
-// Фильтрация продуктов
+// ==================================================
+// FILTERED PRODUCTS (🔍 search встроен сюда)
+// ==================================================
 const filteredProducts = computed(() => {
   return products
+    .filter((product) => {
+      if (!searchQuery.value) return true;
+      return product.name
+        .toLowerCase()
+        .includes(searchQuery.value.toLowerCase());
+    })
     .filter((product) => {
       if (nameFilter.value === "All") return true;
       if (nameFilter.value === "Wafers") return product.name.includes("Wafers");
@@ -75,93 +134,68 @@ const filteredProducts = computed(() => {
     });
 });
 
-// Сортировка продуктов
+// ==================================================
+// SORT
+// ==================================================
 const sortedProducts = computed(() => {
   if (!sortOrder.value) return filteredProducts.value;
-  return [...filteredProducts.value].sort((a, b) => {
-    return sortOrder.value === "asc" ? a.price - b.price : b.price - a.price;
-  });
+  return [...filteredProducts.value].sort((a, b) =>
+    sortOrder.value === "asc" ? a.price - b.price : b.price - a.price,
+  );
 });
 
-// Функция для смены сортировки
 const setSort = (order) => {
   sortOrder.value = order;
   isOpen.value = false;
 };
 
-// --------------------
+// ==================================================
 // PAGINATION
-// --------------------
+// ==================================================
 const currentPage = ref(1);
 const itemsPerPage = ref(12);
 
-// Общее количество страниц
 const totalPages = computed(() =>
   Math.ceil(sortedProducts.value.length / itemsPerPage.value),
 );
 
-// Продукты для текущей страницы
 const paginatedProducts = computed(() => {
   const start = (currentPage.value - 1) * itemsPerPage.value;
   return sortedProducts.value.slice(start, start + itemsPerPage.value);
 });
 
-// Массив страниц для отображения максимум 3
 const displayedPages = computed(() => {
   const total = totalPages.value;
   const current = currentPage.value;
-
-  if (total <= 3) {
-    return Array.from({ length: total }, (_, i) => i + 1);
-  }
-
+  if (total <= 3) return Array.from({ length: total }, (_, i) => i + 1);
   if (current === 1) return [1, 2, 3];
   if (current === total) return [total - 2, total - 1, total];
   return [current - 1, current, current + 1];
 });
 
-// Следим за изменением фильтра и сортировки, чтобы корректировать текущую страницу
 watch([filteredProducts, sortedProducts], () => {
-  if (currentPage.value > totalPages.value) {
-    currentPage.value = totalPages.value || 1;
-  }
+  currentPage.value = 1;
 });
 
-// --------------------
-// RATING
-// --------------------
-import { useRating } from "@/composables/useRating";
-useRating(); // автоматически ищет все элементы с классом .rating
-
-// --------------------
-// CART / CHECKOUT
-// --------------------
+// ==================================================
+// CART / CHECKOUT (НЕ ТРОНУТО)
+// ==================================================
 const cart = ref([]);
-
 const isCheckoutOpen = ref(false);
 const isPlacingOrder = ref(false);
 const isOrderSuccess = ref(false);
 const isCart = ref(false);
 
-// Общее количество товаров в корзине
-const cartCount = computed(() => {
-  return cart.value.reduce((sum, item) => sum + item.quantity, 0);
-});
+const cartCount = computed(() =>
+  cart.value.reduce((sum, item) => sum + item.quantity, 0),
+);
 
-// Добавление товара в корзину
 const addToCart = (product) => {
   const item = cart.value.find((i) => i.id === product.id);
-  if (item) {
-    item.quantity++;
-  } else {
-    cart.value.push({
-      ...product,
-      quantity: 1,
-    });
-  }
+  if (item) item.quantity++;
+  else cart.value.push({ ...product, quantity: 1 });
 };
 
-// Изменение количества товара
 const increaseQty = (id) => {
   const item = cart.value.find((i) => i.id === id);
   if (item) item.quantity++;
@@ -170,71 +204,81 @@ const increaseQty = (id) => {
 const decreaseQty = (id) => {
   const item = cart.value.find((i) => i.id === id);
   if (!item) return;
-  if (item.quantity > 1) {
-    item.quantity--;
-  } else {
-    removeFromCart(id);
-  }
+  if (item.quantity > 1) item.quantity--;
+  else removeFromCart(id);
 };
 
-// Удаление товара из корзины
 const removeFromCart = (id) => {
   cart.value = cart.value.filter((i) => i.id !== id);
 };
 
-// Общая сумма корзины
-const cartTotal = computed(() => {
-  return cart.value.reduce((sum, item) => sum + item.price * item.quantity, 0);
-});
+const cartTotal = computed(() =>
+  cart.value.reduce((sum, item) => sum + item.price * item.quantity, 0),
+);
 
-// Открытие окна оформления заказа
 const checkOut = () => {
   if (!cart.value.length) return;
   isCheckoutOpen.value = true;
 };
 
-// Открытие корзины
 const cartOpen = () => {
   if (!cart.value.length) return;
   isCart.value = true;
 };
 
-// Размещение заказа
 const placeOrder = () => {
   if (!cart.value.length) return;
-
   isCart.value = false;
   isCheckoutOpen.value = false;
   cart.value = [];
   isOrderSuccess.value = true;
-
-  setTimeout(() => {
-    isOrderSuccess.value = false;
-  }, 1500);
+  setTimeout(() => (isOrderSuccess.value = false), 1500);
 };
 </script>
 
 <template>
   <div class="products">
     <!-- Search / Header -->
-    <div class="products__search products-search">
+    <section class="products__search products-search">
       <img :src="MaskGroup" alt="Mask Group" />
       <h2>Products</h2>
       <p>
         Explore our selection of freshly brewed coffee, fine teas, rich
         chocolate, and freshly baked bread. Find your favorite treats here!
       </p>
-      <div>
-        <Search />
-      </div>
-    </div>
+      <div class="search" ref="searchWrapper">
+        <input
+          type="text"
+          placeholder="Search"
+          v-model="searchQuery"
+          @input="isSearchOpen = true"
+        />
+        <button>
+          <img :src="Search" alt="Search Icon" />
+        </button>
 
+        <ul
+          v-if="isSearchOpen && searchResults.length"
+          class="search__dropdown"
+        >
+          <li
+            v-for="item in searchResults"
+            :key="item.name"
+            class="search-dropdown__item"
+            @click="selectSearchResult(item)"
+          >
+            <span>{{ item.name }}</span>
+            <small>({{ item.count }})</small>
+          </li>
+        </ul>
+      </div>
+    </section>
     <!-- E-shop -->
-    <div class="products__e-shop products-e-shop">
+    <section class="products__e-shop products-e-shop">
       <div class="products-e-shop__wrapper">
         <div class="products-e-shop__shop-header">
           <!-- Sort Dropdown -->
-          <div class="products-e-shop__sort">
+          <div class="products-e-shop__sort" ref="sortWrapper">
             <button
               class="products-e-shop__sort-toggle"
               @click="isOpen = !isOpen"
@@ -249,7 +293,6 @@ const placeOrder = () => {
                 :class="{ 'products-e-shop__sort-arrow--open': isOpen }"
               />
             </button>
-
             <ul v-if="isOpen" class="products-e-shop__sort-menu" role="listbox">
               <li
                 class="products-e-shop__sort-option"
@@ -267,7 +310,6 @@ const placeOrder = () => {
               </li>
             </ul>
           </div>
-
           <!-- Results -->
           <div class="products-e-shop__results">
             <p class="products-e-shop__results-current">
@@ -279,7 +321,6 @@ const placeOrder = () => {
             </p>
           </div>
         </div>
-
         <div class="products-e-shop__adaptive-filter">
           <button
             class="products-e-shop__adaptive-filter_btn"
@@ -287,7 +328,6 @@ const placeOrder = () => {
           >
             Filter
           </button>
-
           <!-- Filter dropdown -->
           <div
             class="products-e-shop__adaptive-filter-dropdown"
@@ -301,7 +341,6 @@ const placeOrder = () => {
               <button @click="nameFilter = 'Bread'">Bread</button>
               <button @click="nameFilter = 'Chocolates'">Chocolates</button>
             </div>
-
             <!-- Filter by Price -->
             <div class="filter-section">
               <h4>By Price</h4>
@@ -317,7 +356,6 @@ const placeOrder = () => {
               <button @click="setSort('desc')">High to Low</button>
             </div>
           </div>
-
           <div class="products-e-shop__adaptive-cart">
             <button
               class="products-e-shop__adaptive-cart_btn"
@@ -325,12 +363,9 @@ const placeOrder = () => {
             >
               <img :src="Cart" alt="Cart" />
             </button>
-            <span>
-              {{ cartCount }}
-            </span>
+            <span> {{ cartCount }} </span>
           </div>
         </div>
-
         <!-- Products Grid -->
         <div class="products-e-shop__grid">
           <div
@@ -342,17 +377,14 @@ const placeOrder = () => {
             <div class="products-e-shop__card-image">
               <img :src="product.image" :alt="product.alt" />
             </div>
-
             <!-- Название и вес -->
             <h3 class="products-e-shop__card-name">
               {{ product.name }} {{ product.weight }}
             </h3>
-
             <!-- Рейтинг -->
             <div class="products-e-shop__card-rating rating rating_set">
               <div class="rating__body">
                 <div class="rating__active"></div>
-
                 <div class="rating__items">
                   <input type="radio" class="rating__item" value="1" />
                   <input type="radio" class="rating__item" value="2" />
@@ -361,15 +393,12 @@ const placeOrder = () => {
                   <input type="radio" class="rating__item" value="5" />
                 </div>
               </div>
-
               <div class="rating__value">3</div>
             </div>
-
             <!-- Цена -->
             <p class="products-e-shop__card-price">
               ${{ product.price.toFixed(2) }}
             </p>
-
             <!-- Кнопка добавления в корзину -->
             <button
               class="products-e-shop__card-button"
@@ -384,7 +413,6 @@ const placeOrder = () => {
             </button>
           </div>
         </div>
-
         <!-- Pagination -->
         <div class="products-e-shop__pagination">
           <!-- Кнопка влево -->
@@ -398,7 +426,6 @@ const placeOrder = () => {
           >
             <img :src="ArrowCircle" alt="Pagination Arrow Left" />
           </button>
-
           <!-- Цифровые кнопки -->
           <button
             v-for="page in displayedPages"
@@ -409,7 +436,6 @@ const placeOrder = () => {
           >
             {{ page }}
           </button>
-
           <!-- Кнопка вправо -->
           <button
             class="products-e-shop__pagination-right"
@@ -425,7 +451,6 @@ const placeOrder = () => {
         </div>
         <div class="modal" v-show="isCart" @click.self="isCart = false"></div>
       </div>
-
       <div class="products-e-shop__side">
         <!-- Filters -->
         <div class="products-e-shop__filter">
@@ -443,7 +468,6 @@ const placeOrder = () => {
               >
                 All
               </button>
-
               <button
                 class="products-e-shop__filter-btn"
                 :class="{
@@ -454,7 +478,6 @@ const placeOrder = () => {
               >
                 Wafers
               </button>
-
               <button
                 class="products-e-shop__filter-btn"
                 :class="{
@@ -464,7 +487,6 @@ const placeOrder = () => {
               >
                 Bread
               </button>
-
               <button
                 class="products-e-shop__filter-btn"
                 :class="{
@@ -477,7 +499,6 @@ const placeOrder = () => {
               </button>
             </div>
           </div>
-
           <!-- Price Filter -->
           <div class="products-e-shop__filter-price">
             <div class="products-e-shop__filter-price_title">By Price</div>
@@ -491,7 +512,6 @@ const placeOrder = () => {
               >
                 All Prices
               </button>
-
               <button
                 class="products-e-shop__filter-btn"
                 :class="{
@@ -501,7 +521,6 @@ const placeOrder = () => {
               >
                 Low
               </button>
-
               <button
                 class="products-e-shop__filter-btn"
                 :class="{
@@ -512,7 +531,6 @@ const placeOrder = () => {
               >
                 Medium
               </button>
-
               <button
                 class="products-e-shop__filter-btn"
                 :class="{
@@ -528,7 +546,6 @@ const placeOrder = () => {
         <!-- Cart -->
         <div class="products-e-shop__cart" v-da="'.modal, 1576, first'">
           <div class="products-e-shop__cart_title">Cart</div>
-
           <!-- BODY -->
           <div class="products-e-shop__cart_body">
             <div
@@ -547,7 +564,6 @@ const placeOrder = () => {
                   ✕
                 </button>
               </div>
-
               <!-- info -->
               <div class="products-e-shop__cart-item-info">
                 <div class="products-e-shop__cart-item-name">
@@ -576,21 +592,16 @@ const placeOrder = () => {
                 </div>
               </div>
             </div>
-
             <!-- empty -->
             <div v-if="!cart.length" class="products-e-shop__cart-empty">
               Cart is empty
             </div>
           </div>
-
           <!-- TOTAL -->
           <div class="products-e-shop__cart_total">
-            <span>Total:</span>
-            <strong>${{ cartTotal.toFixed(2) }}</strong>
+            <span>Total:</span> <strong>${{ cartTotal.toFixed(2) }}</strong>
           </div>
-
           <!-- BUTTON -->
-
           <button
             class="products-e-shop__cart_button"
             @click="checkOut"
@@ -600,7 +611,7 @@ const placeOrder = () => {
           </button>
         </div>
       </div>
-    </div>
+    </section>
   </div>
   <div
     v-if="isCheckoutOpen"
@@ -612,10 +623,8 @@ const placeOrder = () => {
       <button class="checkout-modal__close" @click="isCheckoutOpen = false">
         ✕
       </button>
-
       <!-- Title -->
       <h3 class="checkout-modal__title">Order summary</h3>
-
       <!-- Cart items -->
       <div class="checkout-modal__items">
         <div v-for="item in cart" :key="item.id" class="checkout-modal__item">
@@ -627,13 +636,10 @@ const placeOrder = () => {
           <strong>${{ (item.price * item.quantity).toFixed(2) }}</strong>
         </div>
       </div>
-
       <!-- Total -->
       <div class="checkout-modal__total">
-        <span>Total:</span>
-        <strong>${{ cartTotal.toFixed(2) }}</strong>
+        <span>Total:</span> <strong>${{ cartTotal.toFixed(2) }}</strong>
       </div>
-
       <!-- Actions -->
       <button
         class="checkout-modal__confirm"
@@ -652,6 +658,114 @@ const placeOrder = () => {
 </template>
 
 <style lang="scss" scoped>
+.search {
+  @include adaptive-value(width, 711, 290);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  @include adaptive-value(gap, 12, 0);
+  position: relative;
+  & input {
+    flex: 1;
+    @include adaptive-value(width, 646, 237);
+    height: rem(53);
+    border-radius: rem(10);
+    border: 1px solid #cfbcae;
+    @include adaptive-value(padding-left, 32, 10);
+    background-color: #fff;
+    font-family: "DM Sans";
+    font-size: rem(20);
+    color: #2b231d;
+    transition:
+      border-color 0.25s ease,
+      box-shadow 0.25s ease,
+      background-color 0.25s ease;
+
+    &::placeholder {
+      color: #cfbcae;
+      transition: color 0.25s ease;
+    }
+
+    &:hover {
+      border-color: #b09b8c;
+    }
+
+    &:focus {
+      border-color: #de6868;
+      background-color: #fff;
+      box-shadow: 0 0 0 3px rgba(222, 104, 104, 0.25);
+    }
+
+    &:focus::placeholder {
+      color: transparent;
+    }
+  }
+
+  & button {
+    width: rem(53);
+    height: rem(53);
+    background-color: #2b231d;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: rem(10);
+    & img {
+      width: rem(24);
+      height: rem(24);
+      scale: 1;
+      &:hover {
+        scale: 1.2;
+      }
+    }
+  }
+  &__dropdown {
+    max-width: rem(237);
+    position: absolute;
+    top: calc(100% + 2px);
+    left: 0;
+    right: 0;
+
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+    overflow: hidden;
+    z-index: 20;
+
+    max-height: rem(240);
+    overflow-y: auto;
+
+    // scrollbar (optional, nice touch)
+    &::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: #ddd;
+      border-radius: 3px;
+    }
+
+    li {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 14px;
+      font-size: 14px;
+      cursor: pointer;
+      transition: background 0.2s ease;
+
+      &:not(:last-child) {
+        border-bottom: 1px solid #f1f1f1;
+      }
+
+      &:hover {
+        background: #f6f6f6;
+      }
+      & > *:not(:last-child) {
+        margin-right: rem(5);
+      }
+    }
+  }
+}
 .products-e-shop {
   display: flex;
   justify-content: space-between;

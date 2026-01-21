@@ -1,7 +1,6 @@
 <script setup>
 import { ref, onMounted, onUnmounted } from "vue";
 
-import Search from "@/components/Search.vue";
 import MaskGroup from "@/assets/images/mask-group.svg";
 
 import SliderArrow from "@/assets/images/our-cafe/slider-arrow.svg";
@@ -106,7 +105,7 @@ onUnmounted(() => {
 
 <template>
   <div class="our-cafe">
-    <div class="our-cafe__search">
+    <section class="our-cafe__header">
       <img :src="MaskGroup" alt="Mask Group" />
       <h2>Our Cafe</h2>
       <p>
@@ -114,9 +113,8 @@ onUnmounted(() => {
         smooth chocolate drinks. Our cafe is a cozy place where every visit
         feels warm, calm, and delicious.
       </p>
-      <Search />
-    </div>
-    <div
+    </section>
+    <section
       class="home-page__slider slider"
       @touchstart="onTouchStart"
       @touchend="onTouchEnd"
@@ -141,8 +139,8 @@ onUnmounted(() => {
           <img :src="SliderArrow" alt="Slider Arrow Right" />
         </div>
       </div>
-    </div>
-    <div class="our-cafe__serve serve">
+    </section>
+    <section class="our-cafe__serve serve">
       <div class="serve__image">
         <img :src="MaskGroup" alt="Mask Group" />
       </div>
@@ -445,14 +443,14 @@ onUnmounted(() => {
           </div>
         </div>
       </div>
-    </div>
+    </section>
   </div>
 </template>
 <style scoped lang="scss">
 .our-cafe {
-  &__search {
-    @include adaptive-value(padding-top, 250, 50);
-    @include adaptive-value(padding-bottom, 50, 50);
+  &__header {
+    @include adaptive-value(padding-top, 150, 50);
+    @include adaptive-value(padding-bottom, 150, 50);
     @include adaptive-value(padding-left, 50, 15);
     @include adaptive-value(padding-right, 50, 15);
     display: flex;
@@ -475,7 +473,7 @@ onUnmounted(() => {
       line-height: 160%;
       color: #1e1e1e;
       max-width: rem(866);
-      @include adaptive-value(margin-bottom, 100, 30);
+
       @media (max-width: $mobile) {
         font-size: rem(20);
         line-height: 120%;

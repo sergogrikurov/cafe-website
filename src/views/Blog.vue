@@ -1,24 +1,85 @@
 <script setup>
-import { ref, computed, watch, onMounted, onUnmounted } from "vue";
+import { ref, computed, watch, onMounted, onUnmounted, nextTick } from "vue";
+import { useClickOutside } from "@/composables/useClickOutside.js";
 
+import Search from "@/assets/images/search.svg";
 import MaskGroup from "@/assets/images/mask-group.svg";
-import Search from "@/components/Search.vue";
 import RedArrow from "@/assets/images/blog/red-arrow-right.svg";
 import ArrowCircle from "@/assets/images/arrow-circle.svg";
 import DropArrow from "@/assets/images/blog/drop-arrow.svg";
 
 import blogCards from "@/data/blog";
-
 import vDa from "@/directives/v-da";
 
 // --------------------
-// Категории
+// SEARCH (Blog filter)
+// --------------------
+const searchWrapper = ref(null);
+const searchQuery = ref("");
+const isSearchOpen = ref(false);
+
+// активный фильтр из поиска
+const searchCategory = ref(null);
+
+/**
+ * Группировка по title + count
+ */
+const searchResults = computed(() => {
+  if (!searchQuery.value.trim()) return [];
+
+  const query = searchQuery.value.toLowerCase();
+  const map = new Map();
+
+  blogCards.forEach((post) => {
+    if (post.title.toLowerCase().includes(query)) {
+      if (!map.has(post.title)) {
+        map.set(post.title, { title: post.title, count: 0 });
+      }
+      map.get(post.title).count++;
+    }
+  });
+
+  return Array.from(map.values());
+});
+
+/**
+ * Выбор пункта из dropdown
+ */
+const selectSearchResult = (item) => {
+  searchCategory.value = item.title;
+  activeCategory.value = item.title; // синхронизация с категориями
+  searchQuery.value = item.title;
+  isSearchOpen.value = false;
+  currentPage.value = 1;
+};
+
+/**
+ * Закрытие dropdown
+ */
+useClickOutside(searchWrapper, () => {
+  isSearchOpen.value = false;
+});
+
+/**
+ * Очистка фильтра при очистке input
+ */
+watch(searchQuery, (value) => {
+  if (!value) {
+    searchCategory.value = null;
+    activeCategory.value = "All";
+  }
+});
+
+// --------------------
+// Categories
 // --------------------
 const isCategoriesOpen = ref(false);
 const activeCategory = ref("All");
 
 const setCategory = (category) => {
   activeCategory.value = category;
+  searchCategory.value = null;
+  searchQuery.value = "";
   isCategoriesOpen.value = false;
 };
 
@@ -29,10 +90,9 @@ const selectedLabel = computed(() => {
     : activeCategory.value;
 });
 
-// ref для блока селекта
+// ref для селекта
 const selectRef = ref(null);
 
-// Закрытие селекта при клике вне блока
 const handleClickOutside = (e) => {
   if (selectRef.value && !selectRef.value.contains(e.target)) {
     isCategoriesOpen.value = false;
@@ -47,13 +107,13 @@ onUnmounted(() => {
   document.removeEventListener("click", handleClickOutside);
 });
 
-// категории для селекта
+// категории
 const categories = computed(() => {
   return ["All", ...new Set(blogCards.map((post) => post.title))];
 });
 
 // --------------------
-// Фильтрация карточек по категории
+// Filtered posts
 // --------------------
 const filteredPosts = computed(() => {
   if (activeCategory.value === "All") return blogCards;
@@ -61,7 +121,7 @@ const filteredPosts = computed(() => {
 });
 
 // --------------------
-// Пагинация
+// Pagination
 // --------------------
 const currentPage = ref(1);
 const itemsPerPage = ref(10);
@@ -75,9 +135,6 @@ const paginatedPosts = computed(() => {
   return filteredPosts.value.slice(start, start + itemsPerPage.value);
 });
 
-// --------------------
-// Кнопки пагинации (максимум 3)
-// --------------------
 const displayedPages = computed(() => {
   const total = totalPages.value;
   const current = currentPage.value;
@@ -88,23 +145,22 @@ const displayedPages = computed(() => {
   return [current - 1, current, current + 1];
 });
 
-// --------------------
-// Сброс страницы при смене категории
-// --------------------
 watch(activeCategory, () => {
   currentPage.value = 1;
 });
 
-// Recent Posts — последние 2 карточки
+// --------------------
+// Recent posts
+// --------------------
 const recentPosts = computed(() => {
-  return blogCards.slice(-2).reverse(); // reverse чтобы самый новый был сверху
+  return blogCards.slice(-2).reverse();
 });
 </script>
 
 <template>
   <div class="blog">
-    <!-- ---------------- Blog Search ---------------- -->
-    <div class="blog__search">
+    <!-- ================= SEARCH SECTION ================= -->
+    <section class="blog__search">
       <img :src="MaskGroup" alt="Mask Group" />
       <h2>Blog Posts</h2>
       <p>
@@ -112,11 +168,35 @@ const recentPosts = computed(() => {
         the city air. We write about café life, street culture, new products in
         our shop, and everything that makes a simple cup of coffee special.
       </p>
-      <Search />
-    </div>
 
-    <!-- ---------------- Blog Content ---------------- -->
-    <div class="blog__content blog-content">
+      <div class="search" ref="searchWrapper">
+        <img :src="Search" alt="Search Icon" />
+        <input
+          type="text"
+          placeholder="Search"
+          v-model="searchQuery"
+          @focus="isSearchOpen = true"
+        />
+
+        <ul
+          v-if="isSearchOpen && searchResults.length"
+          class="search__dropdown"
+        >
+          <li
+            v-for="item in searchResults"
+            :key="item.title"
+            class="search-dropdown__item"
+            @click="selectSearchResult(item)"
+          >
+            <span>{{ item.title }}</span>
+            <small>({{ item.count }})</small>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ================= CONTENT ================= -->
+    <section class="blog__content blog-content">
       <div class="blog-content__wrapper">
         <!-- ---------------- Cards ---------------- -->
         <div class="blog-content__cards">
@@ -142,6 +222,7 @@ const recentPosts = computed(() => {
             class="blog-side__select"
           >
             <h4>Categories</h4>
+
             <div class="blog-side__categories-select" ref="selectRef">
               <button
                 class="blog-side__select-toggle"
@@ -149,13 +230,17 @@ const recentPosts = computed(() => {
                 aria-haspopup="listbox"
                 :aria-expanded="isCategoriesOpen"
               >
-                <span class="blog-side__select-label">{{ selectedLabel }}</span>
+                <span class="blog-side__select-label">
+                  {{ selectedLabel }}
+                </span>
 
                 <img
                   :src="DropArrow"
                   alt=""
                   class="blog-side__select-arrow"
-                  :class="{ 'blog-side__select-arrow--open': isCategoriesOpen }"
+                  :class="{
+                    'blog-side__select-arrow--open': isCategoriesOpen,
+                  }"
                 />
               </button>
 
@@ -177,9 +262,11 @@ const recentPosts = computed(() => {
             </div>
           </div>
 
+          <!-- Recent Posts -->
           <div class="blog-side__recent-posts recent-posts">
             <img :src="MaskGroup" alt="Mask Group" />
             <h4>Recent Posts</h4>
+
             <div class="recent-posts__cards">
               <div
                 class="recent-posts__card"
@@ -187,8 +274,10 @@ const recentPosts = computed(() => {
                 :key="post.id"
               >
                 <img :src="post.image" :alt="post.alt" />
+
                 <h5>{{ post.title }}</h5>
                 <p>{{ post.text }}</p>
+
                 <button @click="$router.push(`/blog/${post.id}`)">
                   Read More
                   <img :src="RedArrow" alt="Red Arrow" />
@@ -199,9 +288,9 @@ const recentPosts = computed(() => {
         </aside>
       </div>
 
-      <!-- ---------------- Pagination ---------------- -->
+      <!-- ================= PAGINATION ================= -->
       <div class="blog__pagination">
-        <!-- Влево -->
+        <!-- Left -->
         <button
           class="blog__pagination-left"
           :class="{ 'blog__pagination--disabled': currentPage === 1 }"
@@ -211,7 +300,7 @@ const recentPosts = computed(() => {
           <img :src="ArrowCircle" alt="Pagination Arrow Left" />
         </button>
 
-        <!-- Цифровые кнопки -->
+        <!-- Pages -->
         <button
           v-for="page in displayedPages"
           :key="page"
@@ -222,17 +311,19 @@ const recentPosts = computed(() => {
           {{ page }}
         </button>
 
-        <!-- Вправо -->
+        <!-- Right -->
         <button
           class="blog__pagination-right"
-          :class="{ 'blog__pagination--disabled': currentPage === totalPages }"
+          :class="{
+            'blog__pagination--disabled': currentPage === totalPages,
+          }"
           :disabled="currentPage === totalPages"
           @click="currentPage++"
         >
           <img :src="ArrowCircle" alt="Pagination Arrow Right" />
         </button>
       </div>
-    </div>
+    </section>
   </div>
 </template>
 
@@ -270,8 +361,108 @@ const recentPosts = computed(() => {
       }
     }
   }
-  &__content {
-    background-color: #f5f2ef;
+}
+.search {
+  @include adaptive-value(width, 711, 290);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  @include adaptive-value(gap, 12, 0);
+  position: relative;
+  & input {
+    flex: 1;
+    @include adaptive-value(width, 646, 237);
+    height: rem(53);
+    border-radius: rem(10);
+    border: 1px solid #cfbcae;
+    @include adaptive-value(padding-left, 32, 10);
+    background-color: #fff;
+    font-family: "DM Sans";
+    font-size: rem(20);
+    color: #2b231d;
+    transition:
+      border-color 0.25s ease,
+      box-shadow 0.25s ease,
+      background-color 0.25s ease;
+
+    &::placeholder {
+      color: #cfbcae;
+      transition: color 0.25s ease;
+    }
+
+    &:hover {
+      border-color: #b09b8c;
+    }
+
+    &:focus {
+      border-color: #de6868;
+      background-color: #fff;
+      box-shadow: 0 0 0 3px rgba(222, 104, 104, 0.25);
+    }
+
+    &:focus::placeholder {
+      color: transparent;
+    }
+  }
+
+  & img {
+    filter: invert(0.5);
+    position: absolute;
+    right: rem(16);
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    opacity: 0.5;
+    width: rem(24);
+    height: rem(24);
+  }
+
+  &__dropdown {
+    max-width: rem(237);
+    position: absolute;
+    top: calc(100% + 2px);
+    left: 0;
+    right: 0;
+
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+    overflow: hidden;
+    z-index: 20;
+
+    max-height: rem(240);
+    overflow-y: auto;
+
+    // scrollbar (optional, nice touch)
+    &::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: #ddd;
+      border-radius: 3px;
+    }
+
+    li {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 14px;
+      font-size: 14px;
+      cursor: pointer;
+      transition: background 0.2s ease;
+
+      &:not(:last-child) {
+        border-bottom: 1px solid #f1f1f1;
+      }
+
+      &:hover {
+        background: #f6f6f6;
+      }
+      & > *:not(:last-child) {
+        margin-right: rem(5);
+      }
+    }
   }
 }
 // pagination
@@ -426,6 +617,7 @@ const recentPosts = computed(() => {
   display: flex;
   flex-direction: column;
   align-items: center;
+  background-color: #f5f2ef;
   &__wrapper {
     width: 100%;
     display: flex;

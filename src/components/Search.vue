@@ -29,7 +29,9 @@ import Search from "@/assets/images/search.svg";
     font-family: "DM Sans";
     font-size: rem(20);
     color: #2b231d;
-    transition: border-color 0.25s ease, box-shadow 0.25s ease,
+    transition:
+      border-color 0.25s ease,
+      box-shadow 0.25s ease,
       background-color 0.25s ease;
 
     &::placeholder {
